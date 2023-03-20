@@ -17,6 +17,9 @@ from time import sleep
 import requests
 from bs4 import BeautifulSoup
 import re
+from twilio.rest import Client
+import keys
+import pandas as pd
 from datetime import date
 import pyautogui
 from urllib.request import urlopen
@@ -53,11 +56,33 @@ def speak(audio):
 
 dictapp = {"commandprompt":"cmd","paint":"paint","word":"winword", "excel":"excel","chrome":"chrome","vscode":"code", "powerpoint":"powerpnt","notepad":"notepad.exe","calculator":"calc.exe"}
 
+
+# def avl_beds() :
+
+
+
+def show_hospital():
+    req = requests.get(
+        "https://www.practo.com/search/hospitals?results_type=hospital&q=%5B%7B%22word%22%3A%22hospital%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22type%22%7D%5D&city=Jaipur")
+    link1 = "https://www.practo.com/search/hospitals?results_type=hospital&q=%5B%7B%22word%22%3A%22hospital%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22type%22%7D%5D&city=Jaipur"
+    soup = BeautifulSoup(req.content, "html.parser")
+
+    # -----------------------------
+
+    # for h2 in h2:
+    articles = soup.find_all('div', class_='c-estb-info')
+    for item in articles:
+        a2 = ', '.join([x.get_text() for x in item.find_all('a')])
+        print(a2)
+        speak(a2)
+        send_msg(link1)
+
+
 def list_doc():
 
     req = requests.get(
         "https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22doctor%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22common_name%22%7D%5D&city=Mumbai")
-
+    link = "https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22doctor%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22common_name%22%7D%5D&city=Mumbai"
     soup = BeautifulSoup(req.content, "html.parser")
 
     # -----------------------------
@@ -66,12 +91,56 @@ def list_doc():
     articles = soup.find_all('div', class_='listing-doctor-card')
     for item in articles:
         h2 = ', '.join([x.get_text() for x in item.find_all('h2')])
+        print(h2)
         speak(h2)
 
 
-    print("For Appointment and more Info a link shared to your contact number. You can go there. URL:-")
-    # print(soup.prettify())
+    print("For Appointment and more Information a link is being send shortly." )
+    send_msg(link)
 
+def show_hospital():
+    req = requests.get(
+        "https://www.practo.com/search/hospitals?results_type=hospital&q=%5B%7B%22word%22%3A%22hospital%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22type%22%7D%5D&city=Jaipur")
+    link1 = "https://www.practo.com/search/hospitals?results_type=hospital&q=%5B%7B%22word%22%3A%22hospital%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22type%22%7D%5D&city=Jaipur"
+    soup = BeautifulSoup(req.content, "html.parser")
+
+    # -----------------------------
+
+    # for h2 in h2:
+    articles = soup.find_all('div', class_='c-estb-info')
+    for item in articles:
+        a2 = ', '.join([x.get_text() for x in item.find_all('a')])
+        print(a2)
+        speak(a2)
+
+    print("For Appointment and more Information a link is being send shortly.")
+    send_msg(link1)
+
+def read_data():
+    data = pd.read_csv(r'C:\Users\nites\OneDrive\Documents\GitHub\Jaipur-Hackathon\ABHACARD DATA DEMO.csv')
+    df = pd.DataFrame(data, columns=['bmi'])
+    speak(df)
+
+def send_msg(str):
+    client = Client(keys.account_sid, keys.auth_token)
+
+    # message = client.messages.create(
+    #     body= " Shared Link :-" + str,
+    #     from_=keys.twilio_number,
+    #     to=keys.my_phone_number
+    # )
+    print("message sent")
+
+
+def make_call():
+    client = Client(keys.account_sid, keys.auth_token)
+
+    call = client.calls.create(
+        url="http://demo.twilio.com/docs/voice.xml",
+        to=keys.my_phone_number,
+        from_=keys.twilio_number
+    )
+    print("Call Done")
 
 def locations():
     # initialize Nominatim API
@@ -105,7 +174,6 @@ def locations():
     print('Zip Code : ', zipcode)
 
 
-
 def takeCommand():
     #It takes microphone input and return string output
     r = sr.Recognizer()
@@ -131,17 +199,14 @@ def takeCommand():
 if __name__ == '__main__':
 
    while True:
-       #if 1:
-       # locations()
+       #1:
        query = takeCommand().lower()
        if "need help" in query:
            from GreetMe import greetMe
 
            greetMe()
 
-
            while True:
-
             query = takeCommand().lower()
 
             # Logic for executing tasks based on query
@@ -197,51 +262,17 @@ if __name__ == '__main__':
             elif 'welcome' in query:
                 speak("I think i should say that")
 
-            elif 'who am i' in query:
+            elif 'Availiblity of beds' in query:
                 speak("If you can talk then definetly you are human")
 
-            elif 'why you came to the world' in query:
-                speak("Thanks to Bigo$. further It's a Secret")
-
-            elif 'camera' in query or'take a photo' in query:
-                ec.capture(0,"Jarvis Camera","img.jpg")
-
-
-            elif "temperature" in query:
-                search = "temperature in varanasi"
-                url = f"https://www.google.com/search?q={search}"
-                r = requests.get(url)
-                data = BeautifulSoup(r.text, "html.parser")
-                temp = data.find("div", class_="BNeawe").text
-                speak(f"current{search} is {temp}")
-            elif "weather" in query:
-                search = "temperature in varanasi"
-                url = f"https://www.google.com/search?q={search}"
-                r = requests.get(url)
-                data = BeautifulSoup(r.text, "html.parser")
-                temp = data.find("div", class_="BNeawe").text
-                speak(f"current{search} is {temp}")
-
-    # Set An Alarm
-            elif "alarm" in query:
-                speak("Enter the Time!")
-                time = input(":Enter the time")
-
-                while True:
-                    Time_Ac = datetime.datetime.now()
-                    now = Time_Ac.strftime("%H:%M:%S")
-
-                    if now == time:
-                        speak("Alarm Is Ringing")
-                        playsound("music.mp3")
-                        speak("Alarm Closed")
-
-                    elif now>time:
-                        break
-            # --------------------------------Health Functions-----------------------
-
-            elif "doctor near me":
+            elif 'doctor' in query:
                 list_doc()
+                break
+
+            elif "hospital":
+                show_hospital()
+                break
+
 
             elif " book an appoinment" in query:
                 speak("booking")
