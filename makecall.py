@@ -8,4 +8,3 @@ call = client.calls.create(
     to=keys.my_phone_number,
     from_=keys.twilio_number
 )
-#
