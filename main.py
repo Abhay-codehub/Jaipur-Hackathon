@@ -31,6 +31,9 @@ import requests
 from geopy.geocoders import Nominatim
 from bs4 import BeautifulSoup
 from newspaper import Article
+import requests
+from bs4 import BeautifulSoup
+from newspaper import Article
 # from digidevice import location
 # from pyttsx3.drivers._espeak import Key
 
@@ -51,15 +54,23 @@ def speak(audio):
 dictapp = {"commandprompt":"cmd","paint":"paint","word":"winword", "excel":"excel","chrome":"chrome","vscode":"code", "powerpoint":"powerpnt","notepad":"notepad.exe","calculator":"calc.exe"}
 
 def list_doc():
-    req = requests.get("https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22doctor%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22common_name%22%7D%5D&city=Mumbai")
+
+    req = requests.get(
+        "https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22doctor%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22common_name%22%7D%5D&city=Mumbai")
 
     soup = BeautifulSoup(req.content, "html.parser")
 
+    # -----------------------------
+
+    # for h2 in h2:
     articles = soup.find_all('div', class_='listing-doctor-card')
     for item in articles:
         h2 = ', '.join([x.get_text() for x in item.find_all('h2')])
-        print(h2)
         speak(h2)
+
+
+    print("For Appointment and more Info a link shared to your contact number. You can go there. URL:-")
+    # print(soup.prettify())
 
 
 def locations():
@@ -121,7 +132,7 @@ if __name__ == '__main__':
 
    while True:
        #if 1:
-       locations()
+       # locations()
        query = takeCommand().lower()
        if "need help" in query:
            from GreetMe import greetMe
