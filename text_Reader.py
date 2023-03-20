@@ -16,11 +16,14 @@ for item in articles:
     h2 = ', '.join([x.get_text() for x in item.find_all('h2')])
     print(h2)
 
+
+
+# articles = soup.find_all('span', class_ = 'u-c-pointer u-t-hover-underline')
+# for item in articles:
+#     h3 = ', '.join([x.get_text() for x in item.find_all('span')])
+#     print(h3)
+#
 # -----------------------------
 res = soup.text
 
-# print(soup.find('h2', {'data-qa-id': 'doctor_name'}).text)
-# print(soup.find('h2', {'data-qa-id': 'doctor_name'}).text)
-#
-# print(soup.find('h2', {'data-qa-id': 'doctor_name'}).text)
-# print(soup.prettify())
+print(soup.prettify())
