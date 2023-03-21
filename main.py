@@ -312,40 +312,28 @@ if __name__ == '__main__':
 
             # Logic for executing tasks based on query
 
-            if 'chief medicine for paracetamol' in query:
+            if 'cheap medicine for paracetamol' in query:
                 pracetamol()
-                break
 
-            if 'blood bank in jaipur' in query:
+            if 'blood banks in jaipur' in query:
                 blood_bank01()
-                break
 
-            elif 'cheap medicine for pain killers' in query:
-                pain_killer()
-                break
 
             elif 'ventilator' in query:
                 show_vent01()
-                break
 
-            elif 'hospital' in query:
+            elif 'hospitals' in query:
                 show_hospital()
 
-            elif 'doctor' in query:
+            elif 'doctors' in query:
                 list_doc();
-                break
 
             elif "oxygen beds in ajmer" in query:
                 avl_oxg01()
-                break
 
             elif "oxygen beds in jaipur" in query:
                 avl_oxg02()
-                break
 
-            elif " book an appoinment" in query:
-                speak("booking")
-                break
 
             elif "need ambulance" in query:
                 make_call()
