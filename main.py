@@ -31,6 +31,8 @@ import random
 import pywhatkit
 import GreetMe
 import requests
+from multiprocessing import Process
+import sys
 from geopy.geocoders import Nominatim
 from bs4 import BeautifulSoup
 from newspaper import Article
@@ -39,7 +41,9 @@ from bs4 import BeautifulSoup
 from newspaper import Article
 # from digidevice import location
 # from pyttsx3.drivers._espeak import Key
-
+import pandas as pd
+import csv
+import time
 # from flask import Flask,request
 
 # keyboard = Controller()
@@ -57,7 +61,56 @@ def speak(audio):
 dictapp = {"commandprompt":"cmd","paint":"paint","word":"winword", "excel":"excel","chrome":"chrome","vscode":"code", "powerpoint":"powerpnt","notepad":"notepad.exe","calculator":"calc.exe"}
 
 
-# def avl_beds() :
+def take_med(str1):
+    int = 1
+
+    while int == 1:
+        named_tuple = time.localtime()  # get struct_time
+        time_string = time.strftime("%H:%M:%S", named_tuple)
+        client = Client(keys.account_sid, keys.auth_token)
+
+        # time_string1 = time.strftime()
+
+        if (time_string == str1):
+            message = client.messages.create(
+                body="You will win the hackathon",
+                from_=keys.twilio_number,
+                to=keys.my_phone_number
+            )
+
+    time.sleep(1)
+
+
+def pain_killer():
+    with open('Meds price compo.csv', mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        row_count = 1
+        for i in csv_reader:
+            if row_count == 3:
+                speak(i[3])
+                speak("The price is RS 10 per strip")
+            row_count += 1
+
+def pracetamol():
+    with open('Meds price compo.csv', mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        row_count = 1
+        for i in csv_reader:
+            if row_count == 2:
+                speak(i[3])
+                speak("The price is RS 15 per strip")
+            row_count += 1
+
+def blood_bank01() :
+    text = '''1. B.D.Memorial Blood Centre || Plot No. 4&98 Neelkanth colony, Ajmer road near BPCL PETROL PUMP PURANICHUNGI, Jaipur, Jaipur, Rajasthan || Plot No. 4&98 Neelkanth colony, Ajmer road near BPCL PETROL PUMP PURANICHUNGI, Jaipur, Jaipur, Rajasthan || Phone: 9887318888 ,Fax: -, Email: bdmemorialbloodbank@gmail.com || Available, O+Ve:71, B+Ve:28, A+Ve:36, O-Ve:1, AB+Ve:4, B-Ve:1 || Last Updated 06-03-2023 13:47 ||
+
+            2. Blood Centre Mahatma Gandhi Hospital || Blood Bank, M G Medical College and Hospital ,Mahatma Gandhi University of Medical Science and Technology, Sitapura,Jaipur, Jaipur, Jaipur, Rajasthan || Phone: 9116019981 ,Fax: -, Email: mghbloodbank@gmail.com || Available, O+Ve:1, B+Ve:1 || Last Updated : 20-03-2023 10:01 ||
+
+            2. Govt Bdm Sat Hosp Kotputli || Govt BDM hospital Kotputli N.N 48, Kotputli, Jaipur, Rajasthan || Phone: 9116534500 ,Fax: -, Email: bloodbankkotputli@gmail.com || Available, O-Ve:1, O+Ve:35, A+Ve:19, B+Ve:43, AB-Ve:1, AB+Ve:6, A-Ve:4, B-Ve:3 || Last Updated : 19-03-2023 11:51  
+    '''
+
+    speak("Sending you required information shortly")
+    send_msg(text)
 
 
 
@@ -77,6 +130,54 @@ def show_hospital():
         speak(a2)
         send_msg(link1)
 
+def avl_oxg01() :
+    with open('bedsRAJASTHAN.csv', mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        row_count = 1
+        for i in csv_reader:
+            if row_count == 2:
+                print(i[4])
+                speak(i[4])
+            row_count += 1
+        link_oxy_bed01 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
+        send_msg(link_oxy_bed01)
+
+def show_vent01():
+    with open('bedsRAJASTHAN.csv', mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        row_count = 1
+        for i in csv_reader:
+            if row_count == 2:
+                print(i[10])
+                speak(i[10])
+            row_count += 1
+        speak("Sending you all information for that shortly.")
+        link_oxy_bed01 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
+        send_msg(link_oxy_bed01)
+
+def avl_oxg02() :
+    with open('bedsRAJASTHAN.csv', mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        row_count = 1
+        for i in csv_reader:
+            if row_count == 18:
+                print(i[4])
+                speak(i[4])
+            row_count += 1
+        link_oxy_bed02 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
+        send_msg(link_oxy_bed02)
+
+def show_vant02() :
+    with open('bedsRAJASTHAN.csv', mode='r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        row_count = 1
+        for i in csv_reader:
+            if row_count == 18:
+                print(i[10])
+                speak(i[10])
+            row_count += 1
+        link_oxy_bed02 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
+        send_msg(link_oxy_bed02)
 
 def list_doc():
 
@@ -140,7 +241,7 @@ def make_call():
         to=keys.my_phone_number,
         from_=keys.twilio_number
     )
-    print("Call Done")
+    speak("Shortly nearest ambulance will call you.")
 
 def locations():
     # initialize Nominatim API
@@ -210,72 +311,47 @@ if __name__ == '__main__':
             query = takeCommand().lower()
 
             # Logic for executing tasks based on query
-            if 'wikipedia' in query:
-                speak('Searching Wikipedia...')
-                query = query.replace("wikipedia", "")
-                results = wikipedia.summary(query, sentences=2)
-                speak("According to Wikipedia")
-                print(results)
-                speak(results)
 
+            if 'chief medicine for paracetamol' in query:
+                pracetamol()
+                break
 
-            elif 'the time' in query:
-                strTime = datetime.datetime.now().strftime("%H:%M:%S")
-                speak(f"Sir, the time is {strTime}")
+            if 'blood bank in jaipur' in query:
+                blood_bank01()
+                break
 
-            elif 'how are you' in query:
-                speak(" I Am Fine,Thank you")
-                speak("How are You,Sir")
+            elif 'cheap medicine for pain killers' in query:
+                pain_killer()
+                break
 
-            elif 'fine' in query or'good' in query:
-                speak("I am Happy to know that ")
+            elif 'ventilator' in query:
+                show_vent01()
+                break
 
-            elif 'who made you' in query:
-                speak(" I have been created by Bigo4")
-
-            elif 'who are your friends' in query:
-                speak("My Friends are Alexa and Siri")
-
-            elif 'exit' in query or 'stop' in query:
-                speak("Thanks for giving me your time,Sir")
-                exit()
-            elif 'what is your name' in query:
-                speak("my Name is Bigo4 Assitent")
-
-            elif 'joke' in query:
-                speak(pyjokes.get_joke())
-
-            elif "change my name to" in query:
-                speak("What would you like to call me,Sir")
-                query = query.replace("change my name to","")
-                assname = query
-                speak("That is a good one,Sir!")
-
-            elif 'change name' in query:
-                speak("What would you like to call me,Sir")
-                assname = takeCommand()
-                speak("My Friends Call me that")
-
-            elif 'thank you' in query:
-                speak("Always Available Sir,anytime")
-
-            elif 'welcome' in query:
-                speak("I think i should say that")
-
-            elif 'Availiblity of beds' in query:
-                speak("If you can talk then definetly you are human")
+            elif 'hospital' in query:
+                show_hospital()
 
             elif 'doctor' in query:
-                list_doc()
+                list_doc();
                 break
 
-            elif "hospital":
-                show_hospital()
+            elif "oxygen beds in ajmer" in query:
+                avl_oxg01()
                 break
 
+            elif "oxygen beds in jaipur" in query:
+                avl_oxg02()
+                break
 
             elif " book an appoinment" in query:
                 speak("booking")
+                break
+
+            elif "need ambulance" in query:
+                make_call()
+
+            elif "scheduled medicine" in query: # Just for showing the testing part
+                take_med("06:23:00")
 
             elif "sleep" in query:
                 speak("Going to sleep,sir")
