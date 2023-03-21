@@ -188,11 +188,11 @@ def show_hospital():
 def send_msg(str):
     client = Client(keys.account_sid, keys.auth_token)
 
-    # message = client.messages.create(
-    #     body= " Shared Link :-" + str,
-    #     from_=keys.twilio_number,
-    #     to=keys.my_phone_number
-    # )
+    message = client.messages.create(
+        body= " Shared Link :-" + str,
+        from_=keys.twilio_number,
+        to=keys.my_phone_number
+    )
     print("message sent")
 
 
@@ -302,7 +302,7 @@ if __name__ == '__main__':
                 make_call()
 
             elif "scheduled medicine" in query: # Just for showing the testing part
-                take_med("06:23:00")
+                take_med("06:23 :00")
 
             elif "sleep" in query:
                 speak("Going to sleep,sir")
