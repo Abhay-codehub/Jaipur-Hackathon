@@ -36,7 +36,7 @@ def take_med(str1):
 
         if (time_string == str1):
             message = client.messages.create(
-                body="You will win the hackathon",
+                body="Please Take your madicine",
                 from_=keys.twilio_number,
                 to=keys.my_phone_number
             )
