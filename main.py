@@ -1,56 +1,19 @@
-import ctypes
-import datetime
-import shutil
-import ecapture as ec
-import winshell as winshell
-import wolframalpha
-import pyjokes as pyjokes
-import wikipedia
-import webbrowser
+
 import speech_recognition as sr
 import pyttsx3
 import json
-import os
-import smtplib
-import subprocess
-from time import sleep
-import requests
-from bs4 import BeautifulSoup
-import re
 from twilio.rest import Client
 import keys
-import pandas as pd
-from datetime import date
-import pyautogui
 from urllib.request import urlopen
-from playsound import playsound
-import keyboard
-from pynput.keyboard import Key,Controller
-from time import sleep
-import random
-import pywhatkit
-import GreetMe
-import requests
-from multiprocessing import Process
-import sys
 from geopy.geocoders import Nominatim
-from bs4 import BeautifulSoup
-from newspaper import Article
 import requests
 from bs4 import BeautifulSoup
-from newspaper import Article
-# from digidevice import location
-# from pyttsx3.drivers._espeak import Key
 import pandas as pd
 import csv
 import time
-# from flask import Flask,request
-
-# keyboard = Controller()
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
-#print(voices[0].id)
 engine.setProperty('voice',voices[0].id)
 
 def speak(audio):
@@ -121,7 +84,7 @@ def show_hospital():
     soup = BeautifulSoup(req.content, "html.parser")
 
     # -----------------------------
-
+    speak("The few hospitals near you are ")
     # for h2 in h2:
     articles = soup.find_all('div', class_='c-estb-info')
     for item in articles:
@@ -129,6 +92,7 @@ def show_hospital():
         print(a2)
         speak(a2)
         send_msg(link1)
+        speak("Sending more information to you shortly")
 
 def avl_oxg01() :
     with open('bedsRAJASTHAN.csv', mode='r') as csv_file:
@@ -140,6 +104,7 @@ def avl_oxg01() :
                 speak(i[4])
             row_count += 1
         link_oxy_bed01 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
+        speak("Sending You more information shortly.")
         send_msg(link_oxy_bed01)
 
 def show_vent01():
@@ -151,7 +116,7 @@ def show_vent01():
                 print(i[10])
                 speak(i[10])
             row_count += 1
-        speak("Sending you all information for that shortly.")
+        speak("Sending you more information for that shortly.")
         link_oxy_bed01 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
         send_msg(link_oxy_bed01)
 
@@ -165,6 +130,7 @@ def avl_oxg02() :
                 speak(i[4])
             row_count += 1
         link_oxy_bed02 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
+        speak("Sending you more information for that shortly.")
         send_msg(link_oxy_bed02)
 
 def show_vant02() :
@@ -177,6 +143,7 @@ def show_vant02() :
                 speak(i[10])
             row_count += 1
         link_oxy_bed02 = "https://covidinfo.rajasthan.gov.in/COVID19HOSPITALBEDSSTATUSSTATE.aspx"
+        speak("Sending you more information for that shortly.")
         send_msg(link_oxy_bed02)
 
 def list_doc():
@@ -187,7 +154,7 @@ def list_doc():
     soup = BeautifulSoup(req.content, "html.parser")
 
     # -----------------------------
-
+    speak("The few doctors near you are")
     # for h2 in h2:
     articles = soup.find_all('div', class_='listing-doctor-card')
     for item in articles:
@@ -196,7 +163,7 @@ def list_doc():
         speak(h2)
 
 
-    print("For Appointment and more Information a link is being send shortly." )
+    speak("For Appointment and more Information a link is being send shortly." )
     send_msg(link)
 
 def show_hospital():
@@ -214,13 +181,9 @@ def show_hospital():
         print(a2)
         speak(a2)
 
-    print("For Appointment and more Information a link is being send shortly.")
+    speak("For Appointment and more Information a link is being send shortly.")
     send_msg(link1)
 
-def read_data():
-    data = pd.read_csv(r'C:\Users\nites\OneDrive\Documents\GitHub\Jaipur-Hackathon\ABHACARD DATA DEMO.csv')
-    df = pd.DataFrame(data, columns=['bmi'])
-    speak(df)
 
 def send_msg(str):
     client = Client(keys.account_sid, keys.auth_token)
@@ -312,7 +275,7 @@ if __name__ == '__main__':
 
             # Logic for executing tasks based on query
 
-            if 'cheap medicine for paracetamol' in query:
+            if 'alternate medicine for paracetamol' in query:
                 pracetamol()
 
             if 'blood banks in jaipur' in query:
